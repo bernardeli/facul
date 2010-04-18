@@ -22,14 +22,13 @@ int main(int argc, char **argv){
 
     srand(time(NULL));
 
+    // Inicia o array
     if(id == 0){
-        printf("Starting array: \n");
-        for(i = 0; i < SIZE; i++) {
+        for(i = 0; i < SIZE; i++)
             array[i] = rand() % (SIZE * 5);
-            printf("%d ", array[i]);
-        }
     }
 
+    // Broadcast
     MPI_Bcast(array, SIZE, MPI_INT, 0, MPI_COMM_WORLD);
 
     for(i = 0; i < SIZE ; i++)
@@ -37,22 +36,22 @@ int main(int argc, char **argv){
             count++;
 
     if(id != 0)
-        MPI_Send(&count, 1, MPI_INT, 0, 99, MPI_COMM_WORLD);
+        MPI_Send(&count, 1, MPI_INT, 0, 99, MPI_COMM_WORLD); // Performs a blocking send
     else {
         sorted_array[count] = array[0];
 
         for(i = 1; i< proc_size; i++) {
-            MPI_Recv(&count, 1, MPI_INT, i, 99, MPI_COMM_WORLD, &status);
+            MPI_Recv(&count, 1, MPI_INT, i, 99, MPI_COMM_WORLD, &status); // Receive
             printf("proc %d: %d\n", i, count);
             sorted_array[count] = array[i];
         }
     }
 
+    // Sorted array at this point
     if(id == 0){
         printf("Sorted array: \n");
-        for(i = 0; i < SIZE; i++) {
+        for(i = 0; i < SIZE; i++) 
             printf("%d ", sorted_array[i]);
-        }
     }
 
     return 1;
