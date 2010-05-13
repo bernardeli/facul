@@ -7,32 +7,32 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import chat.client.IChatClient;
+import chat.client.InterfaceClientChat;
 
-public class ChatServer extends UnicastRemoteObject implements IChatServer, Serializable {
+public class ServerChat extends UnicastRemoteObject implements InterfaceServerChat, Serializable {
 
-    private static final long serialVersionUID = 7526472295622776147L;
+    private static final long serialVersionUID = 1234567891234567890L;
 
-    private ArrayList<IChatClient> connectedClients;
+    private ArrayList<InterfaceClientChat> connectedClients;
     private ArrayList<String> history;
 
-    public ChatServer() throws RemoteException {
-        this.connectedClients = new ArrayList<IChatClient>();
+    public ServerChat() throws RemoteException {
+        this.connectedClients = new ArrayList<InterfaceClientChat>();
         this.history = new ArrayList<String>();
     }
 
-    public void registerClient(IChatClient newClient) throws RemoteException {
+    public void registerClient(InterfaceClientChat newClient) throws RemoteException {
         connectedClients.add(newClient);
     }
 
-    public void unregisterClient(IChatClient newClient) throws RemoteException {
-        connectedClients.remove(newClient);
+    public void unregisterClient(InterfaceClientChat client) throws RemoteException {
+        connectedClients.remove(client);
     }
 
-    public void publishMessage(IChatClient client, String message) throws RemoteException {
+    public void publishMessage(InterfaceClientChat client, String message) throws RemoteException {
         this.history.add(message);
 
-        for (IChatClient chatClient : this.connectedClients) {
+        for (InterfaceClientChat chatClient : this.connectedClients) {
             if (chatClient.getNickName() != client.getNickName())
                 chatClient.notifyMessage(client, message);
         }
@@ -43,7 +43,7 @@ public class ChatServer extends UnicastRemoteObject implements IChatServer, Seri
 
         try {
             Registry registry = LocateRegistry.getRegistry();
-            IChatServer server = new ChatServer();
+            InterfaceServerChat server = new ServerChat();
             registry.rebind("chatServer", server);
         }
         catch (Exception e) {

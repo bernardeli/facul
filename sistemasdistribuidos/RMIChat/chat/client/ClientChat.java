@@ -5,19 +5,19 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
-import chat.server.IChatServer;
+import chat.server.InterfaceServerChat;
 
-public class ChatClient extends UnicastRemoteObject implements IChatClient, Serializable {
-    private static final long serialVersionUID = 7526472295622776147L;
+public class ClientChat extends UnicastRemoteObject implements InterfaceClientChat, Serializable {
+    private static final long serialVersionUID = 1234567891234567890L;
 
     private String nickName;
-    private IChatServer server;
+    private InterfaceServerChat server;
 
-    public ChatClient(String nickName, String serverUrl) throws RemoteException {
+    public ClientChat(String nickName, String serverUrl) throws RemoteException {
         this.nickName = nickName;
 
         try {
-            this.server = (IChatServer)Naming.lookup(serverUrl);	
+            this.server = (InterfaceServerChat)Naming.lookup(serverUrl);	
             this.server.registerClient(this);
         } catch (Exception e) {
             System.out.println(e);
@@ -46,7 +46,7 @@ public class ChatClient extends UnicastRemoteObject implements IChatClient, Seri
         }
     }
 
-    public void notifyMessage(IChatClient sender, String message) throws RemoteException {
+    public void notifyMessage(InterfaceClientChat sender, String message) throws RemoteException {
         System.out.println(String.format("%s: %s", sender.getNickName(), message));
     }
 
@@ -58,9 +58,9 @@ public class ChatClient extends UnicastRemoteObject implements IChatClient, Seri
         Scanner scan = new Scanner(System.in);
         String nickName = scan.next();
 
-        IChatClient client = null;
+        InterfaceClientChat client = null;
         try {
-            client = new ChatClient(nickName, "rmi://localhost:1099/chatServer");	
+            client = new ClientChat(nickName, "rmi://localhost:1099/chatServer");	
         } catch (Exception e) {
             System.out.println(e);
         }
