@@ -21,8 +21,8 @@ public class ServerChat extends UnicastRemoteObject implements InterfaceServerCh
         this.history = new ArrayList<String>();
     }
 
-    public void registerClient(InterfaceClientChat newClient) throws RemoteException {
-        connectedClients.add(newClient);
+    public void registerClient(InterfaceClientChat client) throws RemoteException {
+        connectedClients.add(client);
     }
 
     public void unregisterClient(InterfaceClientChat client) throws RemoteException {
@@ -33,7 +33,7 @@ public class ServerChat extends UnicastRemoteObject implements InterfaceServerCh
         this.history.add(message);
 
         for (InterfaceClientChat chatClient : this.connectedClients) {
-            if (chatClient.getNickName() != client.getNickName())
+            if (chatClient.getNick() != client.getNick())
                 chatClient.notifyMessage(client, message);
         }
     }

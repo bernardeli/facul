@@ -10,11 +10,11 @@ import chat.server.InterfaceServerChat;
 public class ClientChat extends UnicastRemoteObject implements InterfaceClientChat, Serializable {
     private static final long serialVersionUID = 1234567891234567890L;
 
-    private String nickName;
+    private String nick;
     private InterfaceServerChat server;
 
-    public ClientChat(String nickName, String serverUrl) throws RemoteException {
-        this.nickName = nickName;
+    public ClientChat(String nick, String serverUrl) throws RemoteException {
+        this.nick = nick;
 
         try {
             this.server = (InterfaceServerChat)Naming.lookup(serverUrl);	
@@ -24,7 +24,11 @@ public class ClientChat extends UnicastRemoteObject implements InterfaceClientCh
         }
     }
 
-    public void finalize(){
+    public String getNick() throws RemoteException {
+        return this.nick;
+    }
+
+    public void finalize() throws RemoteException{
         try {
             this.server.unregisterClient(this);	
         } catch (Exception e) {
@@ -32,46 +36,38 @@ public class ClientChat extends UnicastRemoteObject implements InterfaceClientCh
         }
     }
 
-    public String getNickName() throws RemoteException {
-        return this.nickName;
-    }
-
     public void sendMessage(String message) throws RemoteException {
-
         try {
             this.server.publishMessage(this, message);
-
         } catch (Exception e) {
             System.out.println(e);
         }
     }
 
     public void notifyMessage(InterfaceClientChat sender, String message) throws RemoteException {
-        System.out.println(String.format("%s: %s", sender.getNickName(), message));
+        System.out.println(String.format(">> %s: %s", sender.getNick(), message));
     }
 
     public static void main(String[] args) {
-
-        System.out.println("RMI Chat Service\n");
-        System.out.println("Informe um nick name:\n");
+        System.out.println(">> Informe um nick para entrar no chat:");
 
         Scanner scan = new Scanner(System.in);
-        String nickName = scan.next();
-
+        String nick = scan.next();
         InterfaceClientChat client = null;
+
         try {
-            client = new ClientChat(nickName, "rmi://localhost:1099/chatServer");	
+            client = new ClientChat(nick, "rmi://localhost:1099/chatServer");	
         } catch (Exception e) {
             System.out.println(e);
         }
 
-        System.out.println("Digite sua mensagem ou quit para sair\n");
+        System.out.println("Digite sua mensagem ou quit para sair.");
 
         while (true) {
             String message = scan.next();
-            if (message == "quit") {
+            if (message.equals("quit")) {
                 break;
-            } 
+            }
             else {
                 try {
                     client.sendMessage(message);	
@@ -81,7 +77,8 @@ public class ClientChat extends UnicastRemoteObject implements InterfaceClientCh
             }
         }
         try {
-            System.out.println(String.format("%s saiu do chat.", client.getNickName()));	
+            client.sendMessage("saiu do chat");
+            client.finalize();
         } catch (Exception e) {
             System.out.println(e);
         }
