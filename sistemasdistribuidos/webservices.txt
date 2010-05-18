@@ -1,0 +1,24 @@
+Ricardo Bernardelli - 405.2941-1
+
+8) Indique as linhas onde é possível encontrar:
+
+a) 
+
+  - <wsdl:operation name="somar" parameterOrder="a b">
+  <wsdl:input message="impl:somarRequest" name="somarRequest" /> 
+  <wsdl:output message="impl:somarResponse" name="somarResponse" /> 
+  </wsdl:operation>
+
+
+b) 
+- <wsdl:message name="somarResponse">
+  <wsdl:part name="somarReturn" type="xsd:int" /> 
+
+c) 
+- <wsdl:binding name="HelloSoapBinding" type="impl:Hello">
+  <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />
+
+d) 
+- <wsdl:port binding="impl:HelloSoapBinding" name="Hello">
+  <wsdlsoap:address location="http://localhost:8080/axis/Hello.jws" /> 
+  </wsdl:port>
