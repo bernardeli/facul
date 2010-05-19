@@ -32,11 +32,11 @@ public class ServerChat extends UnicastRemoteObject implements InterfaceServerCh
     public void publishMessage(InterfaceClientChat client, String message) throws RemoteException {
         this.history.add(message);
 
-		System.out.println(String.format("Enviando mensagem '%s' para sala '%s' pelo usuário '%s'", message, client.getRoom(), client.getNick()));
+        System.out.println(String.format("Enviando mensagem '%s' para sala '%s' pelo usuário '%s'", message, client.getRoom(), client.getNick()));
 
         for (InterfaceClientChat chatClient : this.connectedClients) {
             if (!(chatClient.getNick().equals(client.getNick())) && (chatClient.getRoom().equals(client.getRoom())))
-            	chatClient.notifyMessage(client, message);
+                chatClient.notifyMessage(client, message);
         }
     }
 

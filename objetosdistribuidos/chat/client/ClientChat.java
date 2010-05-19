@@ -11,12 +11,12 @@ public class ClientChat extends UnicastRemoteObject implements InterfaceClientCh
     private static final long serialVersionUID = 1234567891234567890L;
 
     private String nick;
-	private String room;
+    private String room;
     private InterfaceServerChat server;
 
     public ClientChat(String nick, String room, String serverUrl) throws RemoteException {
         this.nick = nick;
-		this.room = room;
+        this.room = room;
 
         try {
             this.server = (InterfaceServerChat)Naming.lookup(serverUrl);	
@@ -30,16 +30,16 @@ public class ClientChat extends UnicastRemoteObject implements InterfaceClientCh
         return this.nick;
     }
 
-	public String getRoom() throws RemoteException {
-		return this.room;
-	}
+    public String getRoom() throws RemoteException {
+        return this.room;
+    }
 
     public void finalize() throws RemoteException{
         try {
-			this.sendMessage("saiu do chat");
+            this.sendMessage("saiu do chat");
             this.server.unregisterClient(this);	
-	        System.out.println(">> Saindo do chat RMI");
-			System.exit(1);
+            System.out.println(">> Saindo do chat RMI");
+            System.exit(1);
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -62,8 +62,8 @@ public class ClientChat extends UnicastRemoteObject implements InterfaceClientCh
 
         System.out.println(">> Informe um nick para entrar no chat:");
         String nick = scan.next();
-		System.out.println(">> Digite o número da sala:\n- 1\n- 2\n- 3");
-		String room = scan.next();
+        System.out.println(">> Digite o número da sala:\n- 1\n- 2\n- 3");
+        String room = scan.next();
 
         InterfaceClientChat client = null;
 
