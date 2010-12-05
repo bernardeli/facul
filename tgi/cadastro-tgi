@@ -1,7 +1,0 @@
-Titulo:
-Desenvolvimento orientado a testes aplicado à metodologias ágeis com o framework Rails
-
-Resumo:
-Dado a atualidade em desenvolvimento de software, muito se busca softwares que não falham e muitas vezes os erros já são previstos antes de se iniciar o desenvolvimento. Então, como garantir que erros não ocorram ?
-Existem técnicas de desenvolvimento orientado a testes, como TDD (Test Driven Development) e BDD (Behaviour Driven Development) que garantem uma cobertura de testes unitários, funcionais e de integração, buscando o mapeamento do fluxo, seja correto ou tentativa de busca de falhas.
-A ênfase do trabalho será dada em conjunto à metodologias ágeis e aplicações desenvolvidas com ferramentas novas como Ruby on Rails.
